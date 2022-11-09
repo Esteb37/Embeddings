@@ -18,13 +18,15 @@ class Glove:
             self.filename = glove_file
             self.file_processor = fileprocessor.FileProcessor(
                 glove_file, cores)
-            self.load_model()
+
+            # self.load_model()
 
     def __call__(self, words):
         return self.get(words)
 
     def load_model(self):
         self.model = self.file_processor.model_from_file()
+        # self.file_processor.model_to_file(self.model.copy())
 
     @dispatch(str)
     def get(self, word):
@@ -96,8 +98,6 @@ class Glove:
         projection_scores = self.get_scores(
             words, feature_set_1, feature_set_2)
 
-        print(projection_scores)
-
         # order the words by rank
         ranks = np.argsort(projection_scores)
 
@@ -108,5 +108,5 @@ class Glove:
         Return a list of words ordered along feature axis
         """
         ranks = self.get_rankings(words, feature_set_1, feature_set_2)
-        print(ranks)
+
         return list(np.array(words)[ranks])
